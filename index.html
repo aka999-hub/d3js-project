@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .tooltip {
+            /* 上記のCSSスタイルをここに追加 */
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    test
+    <script>
+        const div = d3.selectAll("div");
+
+        // データセット
+        const dataset = [
+            { x: 50, y: 50, value: 10 },
+            { x: 100, y: 100, value: 20 },
+            { x: 150, y: 150, value: 30 },
+            // 他のデータポイントを追加
+        ];
+
+        // SVG要素の幅と高さ
+        const width = 300;
+        const height = 300;
+
+        // SVG要素を作成
+        const svg = d3
+            .select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // ツールチップを作成
+        const tooltip = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // プロットを作成
+        svg
+            .selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            .attr("cx", (d) => d.x)
+            .attr("cy", (d) => d.y)
+            .attr("r", 5) // 円の半径を設定
+            .style("fill", "steelblue") // 円の色を設定
+            .on("mouseover", (d) => {
+                // マウスオーバー時にツールチップを表示
+                tooltip
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                tooltip
+                    .html(`Value: ${d.value}`)
+                    .style("left", d.x + "px")
+                    .style("top", d.y - 20 + "px");
+            })
+            .on("mouseout", () => {
+                // マウスアウト時にツールチップを非表示
+                tooltip.transition().duration(200).style("opacity", 0);
+            });
+    </script>
+</body>
+</html>
