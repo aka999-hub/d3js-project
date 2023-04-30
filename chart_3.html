@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+    <style>
+      .chart {
+        position: relative;
+      }
+      
+      .tick-line {
+        stroke: gray;
+        stroke-dasharray: 2, 2;
+      }
+      
+      .tick-label {
+        fill: black;
+        font-size: 12px;
+      }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+/*
+//            width: 100%;
+//            height: 100%;
+*/
+            width: 617px;
+            height: 281px;
+
+            background-image: url("img/background.png");
+
+            background-size: cover;
+/*
+            opacity: 0.5;
+*/
+            opacity: 0.5;
+            /* 背景画像の透明度を調整 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart">
+<!--
+        <svg width="400" height="300">
+-->
+        <svg width="617" height="281">
+                <g class="axis">
+                <!-- メモリ線の配置 -->
+            </g>
+        </svg>
+        <div class="background-image"></div>
+    </div>
+    <script>
+        // データセット
+        const dataset = [10, 20, 30, 40, 50];
+  
+        // SVG要素の幅と高さ
+        const width = 617;
+        const height = 281;
+
+        // スケール関数の定義
+        const yScale = d3.scaleLinear()
+          .domain([0, d3.max(dataset)])
+          .range([height, 0]);
+  
+        // SVG要素を作成
+        const svg = d3.select("svg");
+  
+        // メモリ線を生成
+        const axisGroup = svg.select(".axis");
+        const tickLines = axisGroup.selectAll(".tick-line")
+          .data(dataset)
+          .enter()
+          .append("line")
+          .attr("class", "tick-line")
+          .attr("x1", 0)
+          .attr("y1", (d) => yScale(d))
+          .attr("x2", width)
+          .attr("y2", (d) => yScale(d));
+  
+        // メモリ値を表示
+        const tickLabels = axisGroup.selectAll(".tick-label")
+          .data(dataset)
+          .enter()
+          .append("text")
+          .attr("class", "tick-label")
+          .attr("x", 10)
+          .attr("y", (d) => yScale(d))
+          .text((d) => d);
+  
+        // 軸のスタイルを設定
+        axisGroup.attr("transform", `translate(0, 0)`) // translateがマージン設定
+          .attr("stroke-width", 1)
+          .attr("fill", "none");
+
+
+      </script>
+</body>
+
+</html>
