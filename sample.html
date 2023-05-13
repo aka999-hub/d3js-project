@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>d3.js background image with scaleLinear example</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        #chart {
+            border: 1px solid blue;
+        }
+    </style>
+  </head>
+  <body>
+    <svg id="chart"></svg>
+    <script>
+      // 画像ファイルのパス
+      var imagePath = "./img/background.png";
+
+      // SVG要素のサイズを指定
+      var margin = { top: 50, right: 50, bottom: 50, left: 50 };
+      var width = 800 - margin.left - margin.right;
+      var height = 600 - margin.top - margin.bottom;
+    //   var width = 617 - margin.left - margin.right;
+    //   var height = 281 - margin.top - margin.bottom;
+
+      // X軸のスケールを作成
+      var xScale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([0, width]);
+
+      // Y軸のスケールを作成
+      var yScale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([height, 0]);
+
+      // X軸を作成
+      var xAxis = d3.axisBottom(xScale)
+        .tickSize(-height)
+        .tickPadding(10);
+
+      // Y軸を作成
+      var yAxis = d3.axisLeft(yScale)
+        .tickSize(-width)
+        .tickPadding(10);
+
+      // SVG要素を作成
+      var svg = d3.select("#chart")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // 背景画像を追加
+      svg.append("defs")
+        .append("pattern")
+        .attr("id", "background-image")
+        .attr("patternUnits", "userSpaceOnUse")
+        .attr("width", width)
+        .attr("height", height)
+        .append("image")
+        .attr("xlink:href", imagePath)
+        .attr("width", width)
+        .attr("height", height);
+        // .attr("height", height)
+        // .style("border", "solid 1px");
+
+      // 背景にパターンを設定
+      svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        // .style("stroke", "solid 1px red")
+        .style("fill", "url(#background-image)");
+
+      // X軸を追加
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+      // Y軸を追加
+      svg.append("g")
+        .call(yAxis);
+
+    //   // 目盛線の位置を調整
+    //   svg.selectAll(".tick line")
+    //     .attr("x2", width)
+    //     .attr("y2", function(d) {
+    //       var y = yScale(d);
+    //       return y < height ? y : 0;
+    //     });
+
+    //   // 目盛ラベルの位置を調整
+    //   svg.selectAll(".tick text")
+    //     .attr("x", -10)
+    //     .attr("y", function(d) {
+    //         var y = yScale(d)
+    //         return y < height ? y : 0;
+    //         });
+    </script>
+  </body>
+  </html>
+  
+
+
