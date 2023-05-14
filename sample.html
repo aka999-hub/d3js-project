@@ -11,6 +11,7 @@
     </style>
   </head>
   <body>
+<!--
     <svg id="chart"></svg>
     <script>
       // 画像ファイルのパス
@@ -96,8 +97,39 @@
     //         return y < height ? y : 0;
     //         });
     </script>
+-->
+
+  <svg width="200" height="200"></svg>
+  <script>
+    var svg = d3.select("svg");
+
+    // グラデーションの定義
+    var gradient = svg.append("defs")
+      .append("radialGradient")
+      .attr("id", "circle-gradient")
+      .attr("cx", "50%")
+      .attr("cy", "50%")
+      .attr("r", "50%")
+      .attr("fx", "50%")
+      .attr("fy", "50%");
+
+    gradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "white");
+
+    gradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "black");
+
+    // サークルの追加
+    svg.append("circle")
+      .attr("cx", 100)
+      .attr("cy", 100)
+      .attr("r", 50)
+      .style("fill", "url(#circle-gradient)");
+  </script>
+
   </body>
   </html>
-  
 
 
