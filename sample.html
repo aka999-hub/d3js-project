@@ -99,6 +99,7 @@
     </script>
 -->
 
+<!-- サークルを中央からグラデーションするコード -->
   <svg width="200" height="200"></svg>
   <script>
     var svg = d3.select("svg");
@@ -133,3 +134,103 @@
   </html>
 
 
+
+<!-- *********************************************** -->
+<!-- サークルを中央からグラデーションするコード -->
+<!-- グラデーションを透過するコード -->
+<!--
+以下は、先程のサンプルコードにグラデーションの透過を追加したものです。透過はCSSのopacityプロパティを使用して設定します。
+
+const width = 500;
+const height = 500;
+
+const svg = d3.select("body")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+const defs = svg.append("defs");
+
+const gradient = defs.append("radialGradient")
+  .attr("id", "grad")
+  .attr("cx", "50%")
+  .attr("cy", "50%")
+  .attr("r", "50%")
+  .attr("fx", "50%")
+  .attr("fy", "50%");
+
+gradient.append("stop")
+  .attr("offset", "0%")
+  .attr("stop-color", "white")
+  .attr("stop-opacity", 1);
+
+gradient.append("stop")
+  .attr("offset", "100%")
+  .attr("stop-color", "black")
+  .attr("stop-opacity", 0.3);
+
+const circles = svg.selectAll("circle")
+  .data([50, 100, 150])
+  .enter()
+  .append("circle")
+  .attr("cx", width / 2)
+  .attr("cy", height / 2)
+  .attr("r", d => d)
+  .attr("fill", "url(#grad)")
+  .style("opacity", 0.7);
+-->
+
+
+
+<!-- *********************************************** -->
+<!-- postgresqlのdbに接続し、テーブルからselect文を発行する
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class PostgresqlExample {
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            // PostgreSQLに接続
+            String url = "jdbc:postgresql://localhost:5432/dbname";
+            String user = "username";
+            String password = "password";
+            conn = DriverManager.getConnection(url, user, password);
+
+            // SELECT文を実行
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM tablename";
+            rs = stmt.executeQuery(sql);
+
+            // 結果を出力
+            while (rs.next()) {
+                System.out.println(rs.getInt("id") + "," + rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // リソースを解放
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+-->
