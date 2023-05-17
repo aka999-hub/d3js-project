@@ -14,9 +14,34 @@
         <div class="chart">
 <script>
 
-// 罫線の色と太さを設定します。
-var lineColor = "black";
-var lineWidth = 1;
+// // 罫線の色と太さを設定します。
+// var lineColor = "black";
+// var lineWidth = 1;
+
+// // svg要素を作成します。
+// var svg = d3.select("body").append("svg");
+
+// // svgの幅と高さを設定します。
+// svg.attr("width", 500).attr("height", 500);
+
+// // svgに線を追加します。
+// svg.append("line")
+//   .attr("x1", 10)
+//   .attr("y1", 0)
+//   .attr("x2", 10)
+//   .attr("y2", 500)
+//   .attr("stroke", lineColor)
+//   .attr("stroke-width", lineWidth);
+
+// データセットを読み込みます。
+var data = [
+//   { x: 1, y: 2 },
+//   { x: 20, y: 10 },
+  { x: 5, y: 6 }
+];
+
+// スケーリング関数を作成します。
+var scale = d3.scaleLinear().domain([0, 10]).range([0, 500]);
 
 // svg要素を作成します。
 var svg = d3.select("body").append("svg");
@@ -25,13 +50,17 @@ var svg = d3.select("body").append("svg");
 svg.attr("width", 500).attr("height", 500);
 
 // svgに線を追加します。
-svg.append("line")
-  .attr("x1", 10)
-  .attr("y1", 0)
-  .attr("x2", 10)
-  .attr("y2", 500)
-  .attr("stroke", lineColor)
-  .attr("stroke-width", lineWidth);
+svg.selectAll("line")
+  .data(data)
+  .enter()
+  .append("line")
+  .attr("x1", function(d) { return scale(d.x); })
+  .attr("y1", function(d) { return scale(d.y); })
+  .attr("x2", function(d) { return scale(d.x + 1); })
+  .attr("y2", function(d) { return scale(d.y + 1); })
+  .attr("stroke", "black")
+  .attr("stroke-width", 1);
+
 </script>
 
 
