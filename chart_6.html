@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3.js Graph with Background Color</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script>
+// SVG要素のサイズとマージン
+var width = 400;
+var height = 300;
+var margin = { top: 20, right: 20, bottom: 30, left: 50 };
+
+// グラフ描画領域のサイズと位置
+var graphWidth = width - margin.left - margin.right;
+var graphHeight = height - margin.top - margin.bottom;
+var graphX = margin.left;
+var graphY = margin.top;
+
+// SVG要素の作成
+var svg = d3
+  .select("body")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+// グラフ描画領域の背景色
+svg
+  .append("rect")
+  .attr("x", graphX)
+  .attr("y", graphY)
+  .attr("width", graphWidth)
+  .attr("height", graphHeight)
+  .attr("fill", "white"); // グラフ描画領域の背景色を設定
+
+// グラフの描画（適当なデータを使用）
+var dataset = [
+  { x: 0, y: 5 },
+  { x: 1, y: 10 },
+  { x: 2, y: 8 },
+  { x: 3, y: 12 },
+  { x: 4, y: 6 },
+  { x: 5, y: 9 },
+];
+
+var xScale = d3
+  .scaleLinear()
+  .domain([0, 5]) // 適切な値に変更してください
+  .range([graphX, graphX + graphWidth]);
+
+var yScale = d3
+  .scaleLinear()
+  .domain([0, 12]) // 適切な値に変更してください
+  .range([graphY + graphHeight, graphY]);
+
+var line = d3.line()
+  .x(function(d) { return xScale(d.x); })
+  .y(function(d) { return yScale(d.y); });
+
+svg.append("path")
+  .datum(dataset)
+  .attr("fill", "red")
+  .attr("stroke", "steelblue")
+  .attr("stroke-width", 2)
+  .attr("d", line);
+
+  </script>
+</body>
+</html>

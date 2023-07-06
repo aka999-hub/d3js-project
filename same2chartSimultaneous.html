@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+    <body>
+        <div class="chart">
+<script>
+// データセット
+const dataset = [10, 20, 30, 40, 50];
+
+// SVGコンテナの幅と高さ
+const width = 400;
+const height = 300;
+
+// 1つ目のSVGコンテナを作成
+const svg1 = d3.select("body")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+// 2つ目のSVGコンテナを作成
+const svg2 = d3.select("body")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+// x軸のスケール
+const xScale = d3.scaleBand()
+  .domain(d3.range(dataset.length))
+  .range([0, width / 2]) // グラフ全体の幅を半分にする
+  .paddingInner(0.05);
+
+// y軸のスケール
+const yScale = d3.scaleLinear()
+  .domain([0, d3.max(dataset)])
+  .range([height, 0]);
+
+// 1つ目の棒グラフを描画
+svg1.selectAll("rect")
+  .data(dataset)
+  .enter()
+  .append("rect")
+  .attr("x", (d, i) => xScale(i)) // 1つ目のグラフのx座標
+  .attr("y", (d) => yScale(d))
+  .attr("width", xScale.bandwidth())
+  .attr("height", (d) => height - yScale(d))
+  .attr("fill", "blue");
+
+// 2つ目の棒グラフを描画
+svg2.selectAll("rect")
+  .data(dataset)
+  .enter()
+  .append("rect")
+  .attr("x", (d, i) => xScale(i) + width / 2) // 2つ目のグラフのx座標をグラフ全体の幅の半分にずらす
+  .attr("y", (d) => yScale(d))
+  .attr("width", xScale.bandwidth())
+  .attr("height", (d) => height - yScale(d))
+  .attr("fill", "blue");
+
+</script>
+
+
+</body>
+
+</html>
