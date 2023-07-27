@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>d3.js Sample</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+
+<script>
+// サンプルデータ
+var data = [
+  { x: "A", y: 10 },
+  { x: "B", y: 20 },
+  { x: "C", y: 5 },
+  { x: "D", y: 30 },
+  { x: "E", y: 25 }
+];
+
+// 最小値を計算
+var minValue = d3.min(data, function(d) { return d.y; });
+
+// SVG領域のサイズ
+var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+    width = 400 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+// スケール関数の設定
+var xScale = d3.scaleBand()
+    .range([0, width])
+    .padding(0.1)
+    .domain(data.map(function(d) { return d.x; }));
+
+var yScale = d3.scaleLinear()
+    .range([height, 0])
+    .domain([Math.max(0, minValue - 2), d3.max(data, function(d) { return d.y; })]);
+
+// 折れ線を描画するためのラインジェネレータ
+var line = d3.line()
+    .x(function(d) { return xScale(d.x) + xScale.bandwidth() / 2; })
+    .y(function(d) { return yScale(d.y); });
+
+// グラフ領域の設定
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// カスタムの罫線関数を作成
+function customXAxis(g) {
+  g.call(d3.axisBottom(xScale).tickSize(-height).tickSizeOuter(0));
+
+  // 特定の目盛りに対して線を描画
+  g.selectAll(".tick line")
+    .filter(function(d) { return d === "A" || d === "C" || d === "E"; })
+    .attr("stroke", "black")
+    .attr("stroke-dasharray", "2,2");
+
+  g.select(".domain").remove(); // X軸のドメイン（罫線）を削除
+}
+
+// X軸を描画
+svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(customXAxis);
+
+// Y軸を描画
+svg.append("g")
+    .call(d3.axisLeft(yScale));
+
+// 折れ線を描画
+svg.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 2);
+
+</script>
+
+</body>
+</html>
