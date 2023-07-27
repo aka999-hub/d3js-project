@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>d3.js Sample</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+
+<script>
+// サンプルデータ
+var data = [
+  { x: "A", y: 10 },
+  { x: "B", y: 20 },
+  { x: "C", y: 5 },
+  { x: "D", y: 30 },
+  { x: "E", y: 25 }
+];
+
+// 最小値を計算
+var minValue = d3.min(data, function(d) { return d.y; });
+
+// SVG領域のサイズ
+var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+    width = 400 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+// スケール関数の設定
+var xScale = d3.scaleBand()
+    .range([0, width])
+    .padding(0.1)
+    .domain(data.map(function(d) { return d.x; }));
+
+var yScale = d3.scaleLinear()
+    .range([height, 0])
+    .domain([Math.max(0, minValue - 2), d3.max(data, function(d) { return d.y; })]);
+
+// 折れ線を描画するためのラインジェネレータ
+var line = d3.line()
+    .x(function(d) { return xScale(d.x) + xScale.bandwidth() / 2; })
+    .y(function(d) { return yScale(d.y); });
+
+// グラフ領域の設定
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// カスタムの罫線関数を作成
+function customYAxis(g) {
+  g.call(d3.axisLeft(yScale).tickSizeOuter(0));
+  g.select(".domain").remove(); // Y軸のドメイン（罫線）を削除
+
+  // 0位置に線を描画
+  g.append("line")
+    .attr("x1", 0)
+    .attr("x2", width)
+    .attr("y1", yScale(0))
+    .attr("y2", yScale(0))
+    .attr("stroke", "black");
+}
+
+// X軸を描画
+svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xScale));
+
+// Y軸を描画
+svg.append("g")
+    .call(customYAxis);
+
+// 折れ線を描画
+svg.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 2);
+
+</script>
+
+</body>
+</html>
+<!--
+サンプルの場合、最小データは5です。
+なので、0から4ぐらいまでが空白になるので、Y軸の開始を2からに動的に変更できるようにできますか？
+
+はい、Y軸の開始値を動的に変更し、データが0に近い値を持っていない場合でもグラフが適切に表示されるように調整することができます。
+以下は、Y軸の開始値をデータの最小値から2引いた値に設定するサンプルコードです。
+
+このサンプルコードでは、Y軸のドメイン（表示範囲）の開始値を Math.max(0, minValue - 2) として設定しています。
+これにより、データの最小値から2引いた値を開始値として、グラフが適切に表示されるようになります。
+最小データが5の場合でも、0から4までの空白がなくなり、グラフが適切に表示されるはずです。
+
+-->
